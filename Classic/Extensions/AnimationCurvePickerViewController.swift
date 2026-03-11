@@ -28,7 +28,7 @@
 
 import UIKit
 
-protocol AnimationCurvePickerViewControllerDelegate: class {
+protocol AnimationCurvePickerViewControllerDelegate: AnyObject {
 
   func animationCurvePickerViewController(_ controller: AnimationCurvePickerViewController, didSelectCurve curve: UIView.AnimationCurve)
 
@@ -89,6 +89,7 @@ extension UIView.AnimationCurve {
     case .easeOut: return "Ease Out"
     case .easeInOut: return "Ease In Out"
     case .linear: return "Linear"
+    @unknown default: return "Unknown"
     }
   }
 
@@ -99,6 +100,7 @@ extension UIView.AnimationCurve {
     case .easeOut: return .curveEaseOut
     case .easeInOut: return .curveEaseInOut
     case .linear: return .curveLinear
+    @unknown default: return .curveLinear
     }
   }
 

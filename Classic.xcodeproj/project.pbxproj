@@ -74,7 +74,7 @@
 		655CC3A6250A5A9200A0D6D0 /* modbus-data.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "modbus-data.c"; sourceTree = "<group>"; };
 		655CC3A7250A5A9200A0D6D0 /* modbus.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = modbus.c; sourceTree = "<group>"; };
 		657301C22523A7E000AF868D /* MQTTDataReading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MQTTDataReading.swift; sourceTree = "<group>"; };
-		657A8D322506AE4B006B2BD0 /* Classic Monitor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Classic Monitor.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		657A8D322506AE4B006B2BD0 /* CasaDelMar Solar Monitor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CasaDelMar Solar Monitor.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		657A8D352506AE4B006B2BD0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		657A8D372506AE4B006B2BD0 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		657A8D392506AE4B006B2BD0 /* ModbusViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModbusViewController.swift; sourceTree = "<group>"; };
@@ -157,7 +157,7 @@
 		657A8D332506AE4B006B2BD0 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				657A8D322506AE4B006B2BD0 /* Classic Monitor.app */,
+				657A8D322506AE4B006B2BD0 /* CasaDelMar Solar Monitor.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -299,7 +299,7 @@
 			);
 			name = Classic;
 			productName = Classic;
-			productReference = 657A8D322506AE4B006B2BD0 /* Classic Monitor.app */;
+			productReference = 657A8D322506AE4B006B2BD0 /* CasaDelMar Solar Monitor.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -308,9 +308,10 @@
 		657A8D2A2506AE4B006B2BD0 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1160;
-				LastUpgradeCheck = 1200;
-				ORGANIZATIONNAME = "Urayoan Miranda";
+				LastUpgradeCheck = 2630;
+				ORGANIZATIONNAME = "Jon Hastie";
 				TargetAttributes = {
 					657A8D312506AE4B006B2BD0 = {
 						CreatedOnToolsVersion = 11.6;
@@ -360,9 +361,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Classic/Pods-Classic-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Classic/Pods-Classic-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -482,8 +487,10 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 648XC4D3FH;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -503,6 +510,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -543,8 +551,11 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 648XC4D3FH;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -557,6 +568,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
@@ -572,15 +584,17 @@
 				CODE_SIGN_ENTITLEMENTS = Classic/Classic.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 14;
-				DEVELOPMENT_TEAM = 648XC4D3FH;
+				DEVELOPMENT_TEAM = UALTDA2MUC;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				INFOPLIST_FILE = Classic/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.midnitesolar.Classic;
-				PRODUCT_NAME = "Classic Monitor";
+				PRODUCT_BUNDLE_IDENTIFIER = org.hastie.ClassicMonitor;
+				PRODUCT_NAME = "CasaDelMar Solar Monitor";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "Classic/ModBusLibs/Classic-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -598,15 +612,17 @@
 				CODE_SIGN_ENTITLEMENTS = Classic/Classic.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 14;
-				DEVELOPMENT_TEAM = 648XC4D3FH;
+				DEVELOPMENT_TEAM = UALTDA2MUC;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				INFOPLIST_FILE = Classic/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.midnitesolar.Classic;
-				PRODUCT_NAME = "Classic Monitor";
+				PRODUCT_BUNDLE_IDENTIFIER = org.hastie.ClassicMonitor;
+				PRODUCT_NAME = "CasaDelMar Solar Monitor";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "Classic/ModBusLibs/Classic-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;

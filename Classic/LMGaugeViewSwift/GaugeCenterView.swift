@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-public protocol GaugeCenterViewDelegate: class {
+public protocol GaugeCenterViewDelegate: AnyObject {
     
     /// Return ring stroke color from the specified value.
     func ringStokeColor(gaugeView: GaugeCenterView, value: Double) -> UIColor

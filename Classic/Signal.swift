@@ -18,16 +18,8 @@ struct Signal {
         return Data(bytes: &fw, count: MemoryLayout<Signal>.stride)
     }
     static func unarchive(d:Data) -> Signal {
-        //#if !targetEnvironment(simulator)
-        //guard d.count == MemoryLayout<Signal>.stride else {
-        //    fatalError("Error trying to get data")
-        //}
-        //#endif
-        
-        var s: Signal?
-        d.withUnsafeBytes({(bytes: UnsafePointer<Signal>) -> Void in
-            s = UnsafePointer<Signal>(bytes).pointee
-        })
-        return s!
+        return d.withUnsafeBytes { bytes in
+            bytes.load(as: Signal.self)
+        }
     }
 }

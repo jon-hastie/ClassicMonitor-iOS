@@ -10,7 +10,7 @@
 import UIKit
 import Foundation
 
-protocol PageViewControllerDelegateModbus: class {
+protocol PageViewControllerDelegateModbus: AnyObject {
     /**
      Called when the number of pages is updated.
      

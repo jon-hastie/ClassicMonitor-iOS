@@ -10,7 +10,7 @@
 import UIKit
 import Foundation
 
-protocol PageViewControllerDelegateMqtt: class {
+protocol PageViewControllerDelegateMqtt: AnyObject {
     /**
      Called when the number of pages is updated.
      

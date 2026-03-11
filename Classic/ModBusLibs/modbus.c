@@ -179,7 +179,7 @@ static int send_msg(modbus_t *ctx, uint8_t *msg, int msg_length)
     /* In recovery mode, the write command will be issued until to be
        successful! Disabled by default. */
     do {
-        rc = ctx->backend->send(ctx, msg, msg_length);
+        rc = (int)ctx->backend->send(ctx, msg, msg_length);
         if (rc == -1) {
             _error_print(ctx, NULL);
             if (ctx->error_recovery & MODBUS_ERROR_RECOVERY_LINK) {
@@ -402,7 +402,7 @@ int _modbus_receive_msg(modbus_t *ctx, uint8_t *msg, msg_type_t msg_type)
             return -1;
         }
 
-        rc = ctx->backend->recv(ctx, msg + msg_length, length_to_read);
+        rc = (int)ctx->backend->recv(ctx, msg + msg_length, length_to_read);
         if (rc == 0) {
             errno = ECONNRESET;
             rc = -1;
@@ -1640,8 +1640,8 @@ int modbus_get_response_timeout(modbus_t *ctx, uint32_t *to_sec, uint32_t *to_us
         return -1;
     }
 
-    *to_sec = ctx->response_timeout.tv_sec;
-    *to_usec = ctx->response_timeout.tv_usec;
+    *to_sec = (uint32_t)ctx->response_timeout.tv_sec;
+    *to_usec = (uint32_t)ctx->response_timeout.tv_usec;
     return 0;
 }
 
@@ -1666,8 +1666,8 @@ int modbus_get_byte_timeout(modbus_t *ctx, uint32_t *to_sec, uint32_t *to_usec)
         return -1;
     }
 
-    *to_sec = ctx->byte_timeout.tv_sec;
-    *to_usec = ctx->byte_timeout.tv_usec;
+    *to_sec = (uint32_t)ctx->byte_timeout.tv_sec;
+    *to_usec = (uint32_t)ctx->byte_timeout.tv_usec;
     return 0;
 }
 
@@ -1692,8 +1692,8 @@ int modbus_get_indication_timeout(modbus_t *ctx, uint32_t *to_sec, uint32_t *to_
         return -1;
     }
 
-    *to_sec = ctx->indication_timeout.tv_sec;
-    *to_usec = ctx->indication_timeout.tv_usec;
+    *to_sec = (uint32_t)ctx->indication_timeout.tv_sec;
+    *to_usec = (uint32_t)ctx->indication_timeout.tv_usec;
     return 0;
 }
 
