@@ -677,29 +677,33 @@ extension DetectDeviceViewController: UITableViewDelegate {
 //        }
 //    }
     
-    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let processInfo = ProcessInfo().globallyUniqueString
         print("Globally Unique String \(processInfo)")
         
-        let delete = UITableViewRowAction(style: .destructive, title: "Delete") { (action, indexPath) in
-            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-            //We need to create a context from this container
+        let delete = UIContextualAction(style: .destructive, title: "Delete") { (action, view, completionHandler) in
+            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+                completionHandler(false)
+                return
+            }
             let managedContext = appDelegate.persistentContainer.viewContext
             managedContext.delete(self.devicelists[indexPath.row])
             self.devicelists.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
             appDelegate.saveContext()
             self.tableView.reloadData()
+            completionHandler(true)
         }
         
-        let edit = UITableViewRowAction(style: .normal, title: "Edit") { (action, indexPath) in
+        let edit = UIContextualAction(style: .normal, title: "Edit") { (action, view, completionHandler) in
             let alert = UIAlertController(title: "Not Yet Implemented", message: "Needs to be implemented.", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
             self.present(alert, animated: true)
+            completionHandler(true)
         }
-        edit.backgroundColor = UIColor(red: 11.0/255, green: 150.0/255, blue: 246.0/255, alpha: 1)//UIColor.blue
+        edit.backgroundColor = UIColor(red: 11.0/255, green: 150.0/255, blue: 246.0/255, alpha: 1)
         
-        return [delete, edit]
+        return UISwipeActionsConfiguration(actions: [delete, edit])
     }
     
     //*****************************************************************
