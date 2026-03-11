@@ -48,47 +48,13 @@ class ConsumptionViewControllerModbus: UIViewController, GaugeViewDelegate {
     }
     
     func optimizeForDeviceSize() {
-        // Adjust album size to fit iPhone 4s, 6s & 6s+
-        let deviceHeight = self.view.bounds.height
-        print("Device Height \(deviceHeight)")
-        if deviceHeight == 480 { //iPhone 4
-            centerGaugeWidthConstraint.constant     = 180
-            centerGaugeHeightConstraint.constant    = 180
-            centerButtonWidthConstraint.constant    = 180
-            centerButtonHeightConstraint.constant   = 180
-            view.updateConstraints()
-        }
-        else if deviceHeight == 568 { //MARK: iPhone 5
-            centerGaugeWidthConstraint.constant     = 200
-            centerGaugeHeightConstraint.constant    = 200
-            centerButtonWidthConstraint.constant    = 200
-            centerButtonHeightConstraint.constant   = 200
-            view.updateConstraints()
-        }
-        else if deviceHeight == 667 {
-            centerGaugeWidthConstraint.constant     = 260
-            centerGaugeHeightConstraint.constant    = 260
-            centerButtonWidthConstraint.constant    = 260
-            centerButtonHeightConstraint.constant   = 260
-            view.updateConstraints()
-        }
-        else if deviceHeight == 896 { //MARK: iPhone 11 Pro
-            centerGaugeWidthConstraint.constant     = 370
-            centerGaugeHeightConstraint.constant    = 370
-            centerButtonWidthConstraint.constant    = 370
-            centerButtonHeightConstraint.constant   = 370
-            view.updateConstraints()
-        }
-        else if deviceHeight == 1024 { //MARK: iPhone 11 Pro
-            centerGaugeWidthConstraint.constant     = 430
-            centerGaugeHeightConstraint.constant    = 430
-            centerButtonWidthConstraint.constant    = 430
-            centerButtonHeightConstraint.constant   = 430
-            view.updateConstraints()
-        }
-        //else if deviceHeight > 667 {
-        //    view.updateConstraints()
-        //}
+        let deviceHeight = view.bounds.height
+        let gaugeSize = min(max((deviceHeight / 667.0) * 260.0, 180.0), 450.0)
+        centerGaugeWidthConstraint.constant   = gaugeSize
+        centerGaugeHeightConstraint.constant  = gaugeSize
+        centerButtonWidthConstraint.constant  = gaugeSize
+        centerButtonHeightConstraint.constant = gaugeSize
+        view.updateConstraints()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -137,12 +103,18 @@ class ConsumptionViewControllerModbus: UIViewController, GaugeViewDelegate {
                 //print("ENTRO AL DATAMANAGER: \(String(describing: array))")
                 if error != nil {
                     if kDebugLog { print("Error nil - ViewControllers: \(String(describing: error))") }
+                    DispatchQueue.main.async {
+                        self.buttonDeviceDescription.setTitle("Connection Error", for: .normal)
+                    }
                     return
                 } else {
                     if kDebugLog { print("Received Data Array1: \(String(describing: readData1))") }
                     DataManager.readRegistersValues(classicURL: self.classicURL as NSString, classicPort: self.classicPort, device: 1, startAddress: 4360, count: 22) { readData2, error in
                         if error != nil {
                             if kDebugLog { print("Error nil - ViewControllers: \(String(describing: error))") }
+                            DispatchQueue.main.async {
+                                self.buttonDeviceDescription.setTitle("Connection Error", for: .normal)
+                            }
                             return
                         } else {
                             if kDebugLog { print("Received Data Array2: \(String(describing: readData2))") }
@@ -345,7 +317,7 @@ class ConsumptionViewControllerModbus: UIViewController, GaugeViewDelegate {
         
         // Configure gauge view
         //MARK: Gauge Power View
-        let screenMinSize = min(UIScreen.main.bounds.size.width, UIScreen.main.bounds.size.height)
+        let screenMinSize = min(view.bounds.width, view.bounds.height)
         let ratio = Double(screenMinSize)/320
         gaugeConsumptionView.divisionsRadius          = 1.25 * ratio
         gaugeConsumptionView.subDivisionsRadius       = (1.25 - 0.5) * ratio

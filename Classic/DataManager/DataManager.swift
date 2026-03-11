@@ -27,6 +27,5 @@ struct DataManager {
             completion(nil, error)
             return
         })
-        swiftLibModbus.disconnect()
     }
 }

@@ -53,41 +53,14 @@ class WizbangJRViewControllerModbus: UIViewController, GaugeCenterViewDelegate {
     }
     
     func optimizeForDeviceSize() {
-        // Adjust album size to fit iPhone 4s, 6s & 6s+
-        let deviceHeight = self.view.bounds.height
-        print("Device Height \(deviceHeight)")
-        if deviceHeight == 480 { //iPhone 4
-            centerGaugeWidthConstraint.constant     = 180
-            centerGaugeHeightConstraint.constant    = 180
-            batteryWidthConstraint.constant         = batteryWidthConstraint.constant * 0.75
-            batteryHeightConstraint.constant        = batteryHeightConstraint.constant * 0.75
-            view.updateConstraints()
-        }
-        else if deviceHeight == 568 { //MARK: iPhone 5
-            centerGaugeWidthConstraint.constant     = 200
-            centerGaugeHeightConstraint.constant    = 200
-            batteryWidthConstraint.constant         = batteryWidthConstraint.constant * 0.80
-            batteryHeightConstraint.constant        = batteryHeightConstraint.constant * 0.80
-            view.updateConstraints()
-        }
-        else if deviceHeight == 667 {
-            centerGaugeWidthConstraint.constant     = 260
-            centerGaugeHeightConstraint.constant    = 260
-            view.updateConstraints()
-        }
-        else if deviceHeight == 896 { //MARK: iPhone 11 Pro
-            centerGaugeWidthConstraint.constant     = 370
-            centerGaugeHeightConstraint.constant    = 370
-            view.updateConstraints()
-        }
-        else if deviceHeight == 1024 { //MARK: iPhone 11 Pro
-            centerGaugeWidthConstraint.constant     = 430
-            centerGaugeHeightConstraint.constant    = 430
-            view.updateConstraints()
-        }
-        //else if deviceHeight > 667 {
-        //    view.updateConstraints()
-        //}
+        let deviceHeight = view.bounds.height
+        let gaugeSize = min(max((deviceHeight / 667.0) * 260.0, 180.0), 450.0)
+        let scale = gaugeSize / 260.0
+        centerGaugeWidthConstraint.constant  = gaugeSize
+        centerGaugeHeightConstraint.constant = gaugeSize
+        batteryWidthConstraint.constant      = batteryWidthConstraint.constant * scale
+        batteryHeightConstraint.constant     = batteryHeightConstraint.constant * scale
+        view.updateConstraints()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -267,7 +240,7 @@ class WizbangJRViewControllerModbus: UIViewController, GaugeCenterViewDelegate {
         gaugeWizbangJR.unitOfMeasurementTextColor = UIColor(white: 0.7, alpha: 1)
         gaugeWizbangJR.setNeedsDisplay()
         
-        let screenMinSize = min(UIScreen.main.bounds.size.width, UIScreen.main.bounds.size.height)
+        let screenMinSize = min(view.bounds.width, view.bounds.height)
         let ratio = Double(screenMinSize)/320
         gaugeWizbangJR.divisionsRadius          = 1.25 * ratio
         gaugeWizbangJR.subDivisionsRadius       = (1.25 - 0.5) * ratio
@@ -313,6 +286,9 @@ class WizbangJRViewControllerModbus: UIViewController, GaugeCenterViewDelegate {
                 //print("ENTRO AL DATAMANAGER: \(String(describing: array))")
                 if error != nil {
                     if kDebugLog { print("Error nil - ViewControllers: \(String(describing: error))") }
+                    DispatchQueue.main.async {
+                        self.buttonDeviceDescription.setTitle("Connection Error", for: .normal)
+                    }
                 } else {
                     //MARK: Data Example
                     //Received Data 1: [53, 7, 0, 0, 80, 0, 65461, 65535, 4, 0, 65530, 10068, 98, 65535, 65535, 4, 196, 38216, 250, 0, 200, 49]

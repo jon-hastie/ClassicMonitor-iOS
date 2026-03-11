@@ -13,7 +13,7 @@ import UIKit
 import CocoaAsyncSocket
 import CoreData
 
-class DetectDeviceViewController: UIViewController, GCDAsyncUdpSocketDelegate, UISearchBarDelegate, UITableViewDataSource, UITextFieldDelegate, UITextViewDelegate, UIActionSheetDelegate {
+class DetectDeviceViewController: UIViewController, GCDAsyncUdpSocketDelegate, UISearchBarDelegate, UITableViewDataSource, UITextFieldDelegate, UITextViewDelegate {
     
     @IBOutlet weak var tableView:           UITableView!
     @IBOutlet weak var searchController:    UISearchBar!
@@ -221,7 +221,7 @@ class DetectDeviceViewController: UIViewController, GCDAsyncUdpSocketDelegate, U
                 
                 let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "DeviceData")
                 fetchRequest.predicate = NSPredicate(format: "deviceName == %@", deviceModel!)
-                let res = try! managedContext.fetch(fetchRequest)
+                guard let res = try? managedContext.fetch(fetchRequest) else { return }
                 
                 // 3
                 //MARK: To do not add nothing
@@ -677,29 +677,27 @@ extension DetectDeviceViewController: UITableViewDelegate {
 //        }
 //    }
     
-    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        let processInfo = ProcessInfo().globallyUniqueString
-        print("Globally Unique String \(processInfo)")
-        
-        let delete = UITableViewRowAction(style: .destructive, title: "Delete") { (action, indexPath) in
-            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-            //We need to create a context from this container
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let delete = UIContextualAction(style: .destructive, title: "Delete") { _, _, completion in
+            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { completion(false); return }
             let managedContext = appDelegate.persistentContainer.viewContext
             managedContext.delete(self.devicelists[indexPath.row])
             self.devicelists.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
             appDelegate.saveContext()
-            self.tableView.reloadData()
+            tableView.reloadData()
+            completion(true)
         }
-        
-        let edit = UITableViewRowAction(style: .normal, title: "Edit") { (action, indexPath) in
+
+        let edit = UIContextualAction(style: .normal, title: "Edit") { _, _, completion in
             let alert = UIAlertController(title: "Not Yet Implemented", message: "Needs to be implemented.", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
             self.present(alert, animated: true)
+            completion(false)
         }
-        edit.backgroundColor = UIColor(red: 11.0/255, green: 150.0/255, blue: 246.0/255, alpha: 1)//UIColor.blue
-        
-        return [delete, edit]
+        edit.backgroundColor = UIColor(red: 11.0/255, green: 150.0/255, blue: 246.0/255, alpha: 1)
+
+        return UISwipeActionsConfiguration(actions: [delete, edit])
     }
     
     //*****************************************************************

@@ -56,47 +56,13 @@ class ConsumptionViewControllerMqtt: UIViewController, GaugeViewDelegate, MQTTSe
     }
     
     func optimizeForDeviceSize() {
-        // Adjust album size to fit iPhone 4s, 6s & 6s+
-        let deviceHeight = self.view.bounds.height
-        print("Device Height \(deviceHeight)")
-        if deviceHeight == 480 { //iPhone 4
-            centerGaugeWidthConstraint.constant     = 180
-            centerGaugeHeightConstraint.constant    = 180
-            centerButtonWidthConstraint.constant    = 180
-            centerButtonHeightConstraint.constant   = 180
-            view.updateConstraints()
-        }
-        else if deviceHeight == 568 { //MARK: iPhone 5
-            centerGaugeWidthConstraint.constant     = 200
-            centerGaugeHeightConstraint.constant    = 200
-            centerButtonWidthConstraint.constant    = 200
-            centerButtonHeightConstraint.constant   = 200
-            view.updateConstraints()
-        }
-        else if deviceHeight == 667 {
-            centerGaugeWidthConstraint.constant     = 260
-            centerGaugeHeightConstraint.constant    = 260
-            centerButtonWidthConstraint.constant    = 260
-            centerButtonHeightConstraint.constant   = 260
-            view.updateConstraints()
-        }
-        else if deviceHeight == 896 { //MARK: iPhone 11 Pro
-            centerGaugeWidthConstraint.constant     = 370
-            centerGaugeHeightConstraint.constant    = 370
-            centerButtonWidthConstraint.constant    = 370
-            centerButtonHeightConstraint.constant   = 370
-            view.updateConstraints()
-        }
-        else if deviceHeight == 1024 { //MARK: iPhone 11 Pro
-            centerGaugeWidthConstraint.constant     = 430
-            centerGaugeHeightConstraint.constant    = 430
-            centerButtonWidthConstraint.constant    = 430
-            centerButtonHeightConstraint.constant   = 430
-            view.updateConstraints()
-        }
-        //else if deviceHeight > 667 {
-        //    view.updateConstraints()
-        //}
+        let deviceHeight = view.bounds.height
+        let gaugeSize = min(max((deviceHeight / 667.0) * 260.0, 180.0), 450.0)
+        centerGaugeWidthConstraint.constant   = gaugeSize
+        centerGaugeHeightConstraint.constant  = gaugeSize
+        centerButtonWidthConstraint.constant  = gaugeSize
+        centerButtonHeightConstraint.constant = gaugeSize
+        view.updateConstraints()
     }
     
     @objc func appMovedToBackground() {
@@ -196,7 +162,7 @@ class ConsumptionViewControllerMqtt: UIViewController, GaugeViewDelegate, MQTTSe
         
         // Configure gauge view
         //MARK: Gauge Power View
-        let screenMinSize = min(UIScreen.main.bounds.size.width, UIScreen.main.bounds.size.height)
+        let screenMinSize = min(view.bounds.width, view.bounds.height)
         let ratio = Double(screenMinSize)/320
         gaugeConsumptionView.divisionsRadius          = 1.25 * ratio
         gaugeConsumptionView.subDivisionsRadius       = (1.25 - 0.5) * ratio
@@ -268,20 +234,29 @@ class ConsumptionViewControllerMqtt: UIViewController, GaugeViewDelegate, MQTTSe
             print("MQTT Closed")
             unSuscribe()
         case .connectionClosedByBroker:
-            //self.status.text = "Closed by Broker"
             print("MQTT Closed by Broker")
+            showConnectionAlert(message: "Connection closed by broker.")
         case .connectionError:
-            //self.status.text = "Error"
             print("MQTT Error")
+            showConnectionAlert(message: "Unable to connect to MQTT broker. Check host and port.")
         case .connectionRefused:
-            //self.status.text = "Refused"
             print("MQTT Refused")
+            showConnectionAlert(message: "Connection refused by broker. Check credentials.")
         case .protocolError:
-            //self.status.text = "Protocol Error"
             print("MQTT Protocol Error")
+            showConnectionAlert(message: "MQTT protocol error. Check broker settings.")
         @unknown default:
             print("MQTT Unkown")
             return
+        }
+    }
+
+    private func showConnectionAlert(message: String) {
+        DispatchQueue.main.async {
+            self.buttonDeviceDescription.setTitle("Connection Error", for: .normal)
+            let alert = UIAlertController(title: "Connection Error", message: message, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default))
+            self.present(alert, animated: true)
         }
     }
     
