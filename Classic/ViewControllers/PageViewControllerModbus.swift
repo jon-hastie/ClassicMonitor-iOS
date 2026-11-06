@@ -35,7 +35,7 @@ class PageViewControllerModbus: UIPageViewController {
     weak var pageDelegate: PageViewControllerDelegateModbus?
     
     var classicURL: String      = ""
-    var classicPort: Int32      = 1883
+    var classicPort: Int32      = 502
     var mqttUser: String        = ""
     var mqttPassword: String    = ""
     var mqttTopic: String       = ""

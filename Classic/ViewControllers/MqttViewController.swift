@@ -427,7 +427,7 @@ extension MqttViewController: MQTTSessionDelegate {
     
     @objc func publish() {
         print("PUBLISH TO TOPIC: \(mqttTopic)\(classicName)/cmnd")
-        self.session.publishData(("{\"wake\"}").data(using: String.Encoding.utf8, allowLossyConversion: false),
+        self.session.publishData(("{\"cmd\":\"wake\"}").data(using: String.Encoding.utf8, allowLossyConversion: false),
                                  onTopic: "\(mqttTopic)\(classicName)/cmnd",
                                  retain: false,
                                  qos: .atMostOnce)
@@ -515,7 +515,9 @@ extension MqttViewController: MQTTSessionDelegate {
     
     func disconnectFromDevice() {
         if kDebugLog { print("Disconnect") }
-        connectDisconnect()
+        if self.session.status == .connected {
+            self.session.disconnect()
+        }
         invalidateTimer()
     }
 }

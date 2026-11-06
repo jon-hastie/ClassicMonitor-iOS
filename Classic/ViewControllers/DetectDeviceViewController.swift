@@ -151,7 +151,7 @@ class DetectDeviceViewController: UIViewController, GCDAsyncUdpSocketDelegate, U
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        if (socket != nil && !socket.isClosed()) {
+        if let socket = socket, !socket.isClosed() {
             socket.close()
         }
     }
@@ -221,8 +221,8 @@ class DetectDeviceViewController: UIViewController, GCDAsyncUdpSocketDelegate, U
                 
                 let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "DeviceData")
                 fetchRequest.predicate = NSPredicate(format: "deviceName == %@", deviceModel!)
-                let res = try! managedContext.fetch(fetchRequest)
-                
+                guard let res = try? managedContext.fetch(fetchRequest) else { return }
+
                 // 3
                 //MARK: To do not add nothing
                 if (res.count == 0) {
@@ -742,9 +742,8 @@ extension DetectDeviceViewController {
                 self.setupConnection()
             }
             reachability?.whenUnreachable = { reachability in
-                //MARK: se le puso verificacion de nil antes para asegurarse que esté activo el objeto
-                if (!self.socket.isClosed()) {
-                    self.socket.close()
+                if let socket = self.socket, !socket.isClosed() {
+                    socket.close()
                 }
             }
         } else {
@@ -760,11 +759,11 @@ extension DetectDeviceViewController {
     @objc func reachabilityChanged(_ note: Notification) {
         let reachability = note.object as! Reachability
         if reachability.connection != .unavailable {
-            if (!self.socket.isClosed()) {
-                self.socket.close()
-            }
-        } else {
             self.setupConnection()
+        } else {
+            if let socket = self.socket, !socket.isClosed() {
+                socket.close()
+            }
         }
     }
     
@@ -792,18 +791,18 @@ extension DetectDeviceViewController {
             setupConnection()
         case .cellular:
             if kDebugLog { print("Reachable via Cellular") }
-            if (!self.socket.isClosed()) {
-                self.socket.close()
+            if let socket = self.socket, !socket.isClosed() {
+                socket.close()
             }
         case .unavailable:
             if kDebugLog { print("Network not reachable") }
-            if (!self.socket.isClosed()) {
-                self.socket.close()
+            if let socket = self.socket, !socket.isClosed() {
+                socket.close()
             }
         case .none:
             if kDebugLog {print("Unknown") }
-            if (!self.socket.isClosed()) {
-                self.socket.close()
+            if let socket = self.socket, !socket.isClosed() {
+                socket.close()
             }
         }
     }

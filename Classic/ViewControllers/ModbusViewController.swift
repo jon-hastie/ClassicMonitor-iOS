@@ -275,12 +275,11 @@ class ModbusViewController: UIViewController, GaugeViewDelegate {
     
     @objc func reachabilityChanged(_ note: Notification) {
         let reachability = note.object as! Reachability
-        
+
         if reachability.connection != .unavailable {
-            self.invalidateTimer()
-            //self.swiftLibModbus!.disconnect()
-        } else {
             self.createTimer()
+        } else {
+            self.invalidateTimer()
         }
     }
     
